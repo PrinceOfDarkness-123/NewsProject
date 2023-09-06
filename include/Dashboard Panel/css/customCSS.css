@@ -1,0 +1,71 @@
+input.btn-color{
+    background-color: #5886ff;
+    width: 80%;
+    position: relative;
+    left: 50px;
+}
+#main{
+    position: relative;
+    left: 8%;
+}
+form.drop-shadow{
+    box-shadow: 0 70px 80px 0 rgba(151, 99, 201, 0.2), 0 6px 20px 0 rgba(115, 85, 199, 0.19);
+    border: none;
+}
+div.form-group input.hover-shadow:hover{
+    transition: .3s;
+    background-color: #e8e8f1;
+}
+div.hover-shadow:hover{
+    transition: .3s;
+    background-color: #e8e8f1;
+}
+div.table-shadow{
+    box-shadow: 0 70px 80px 0 rgba(151, 99, 201, 0.2), 0 6px 20px 0 rgba(115, 85, 199, 0.19);
+}
+.thead-light{
+    background-color: #5886ff;
+}
+th{
+    color: white;
+}
+.button-color{
+    background-color: #fff;
+    box-shadow: 0 70px 80px 0 rgba(151, 99, 201, 0.2), 0 6px 20px 0 rgba(115, 85, 199, 0.19);
+    border: none;
+}
+.fas, .fa-edit{
+    color: #5886ff;
+}
+.button-color:hover{
+    background-color: #5886ff;
+    box-shadow: 0 4px 6px 0 rgba(151, 99, 201, 0.2), 0 6px 20px 0 rgba(115, 85, 199, 0.19);
+    border: none;
+}
+.fa-edit:hover, .fa-trash:hover{
+    color: #fff;
+}
+.register-color{
+    background-color: #5886ff;
+    border: none;
+    width: 500px;
+}
+.register-color:hover{
+    background-color: #789bf4;
+}
+.fa-plus{
+    color: #fff;
+    position: relative;
+    right: 8px;
+    
+}
+
+
+
+
+
+
+
+
+
+
