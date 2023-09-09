@@ -40,7 +40,7 @@ require("include/database.php");
                             <a class="nav-link text-body small" href="#"><?php echo date(' day-month-year') ?></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-body small" href="#">Login</a>
+                            <a class="nav-link text-body small" href="include/">Login</a>
                         </li>
                     </ul>
                 </nav>
@@ -71,8 +71,8 @@ require("include/database.php");
             </button>
             <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
-                    <a href="index.php" class="nav-item nav-link active">Home</a>
-                    <a href="news.php" class="nav-item nav-link">Single News</a>
+                    <a href="index.php" class="nav-item nav-link">Home</a>
+                    <a href="news.php" class="nav-item nav-link active">Single News</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Category</a>
                         <div class="dropdown-menu rounded-0 m-0">
@@ -113,7 +113,8 @@ require("include/database.php");
                 <div class="col-lg-8">
                     <!-- News Detail Start -->
                     <div class="position-relative mb-3">
-                        <img class="img-fluid w-100" src="img/news-700x435-1.jpg" style="object-fit: cover;">
+                        
+                        
                         <div class="bg-white border border-top-0 p-4">
                             <?php
                               $id = $_GET['id'];
@@ -124,6 +125,7 @@ require("include/database.php");
 
                            while($row = mysqli_fetch_assoc($query)){
                             echo '<div class="mb-3">
+                            <img class="w-100" src="include/Dashboard Panel/Backend Images/'.$row["image"].'" width="700" height="435">
                             <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
                                 href="category.php?category_id='.$row['category_id'].'">'.$row["categories_title"].'</a>
                         </div>
@@ -161,7 +163,7 @@ require("include/database.php");
                         <div class="bg-white border border-top-0 p-3">
                         <?php
                               $limit = 5;
-                              $sql= "SELECT news.news_title, news.text, categories.categories_title, news.image
+                              $sql= "SELECT news.news_title, news.id, categories.category_id, news.text, categories.categories_title, news.image
                                                   FROM news LEFT JOIN categories ON news.category_id = categories.category_id ORDER BY 
                                                news.id DESC LIMIT $limit";
                               $query = mysqli_query($conn, $sql); 
@@ -170,10 +172,10 @@ require("include/database.php");
                                 <img class="img-fluid" src="include/Dashboard Panel/Backend Images/'.$row["image"].'" width="110" height="110">
                                 <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
                                     <div class="mb-2">
-                                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">'.$row["categories_title"].'</a>
+                                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="category.php?category_id='.$row['category_id'].'">'.$row["categories_title"].'</a>
                                         
                                     </div>
-                                    <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="">'.substr($row["news_title"], 0, 40).'.....</a>
+                                    <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="news.php?id='.$row['id'].'">'.substr($row["news_title"], 0, 40).'.....</a>
                                 </div>
                             </div>';
                               }
@@ -248,75 +250,50 @@ require("include/database.php");
             </div>
             <div class="col-lg-3 col-md-6 mb-5">
                 <h5 class="mb-4 text-white text-uppercase font-weight-bold">Popular News</h5>
-                <div class="mb-3">
-                    <div class="mb-2">
-                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
-                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
-                    </div>
-                    <a class="small text-body text-uppercase font-weight-medium" href="">Lorem ipsum dolor sit amet elit. Proin vitae porta diam...</a>
-                </div>
-                <div class="mb-3">
-                    <div class="mb-2">
-                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
-                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
-                    </div>
-                    <a class="small text-body text-uppercase font-weight-medium" href="">Lorem ipsum dolor sit amet elit. Proin vitae porta diam...</a>
-                </div>
-                <div class="">
-                    <div class="mb-2">
-                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
-                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
-                    </div>
-                    <a class="small text-body text-uppercase font-weight-medium" href="">Lorem ipsum dolor sit amet elit. Proin vitae porta diam...</a>
-                </div>
+                <?php
+                              $limit = 3;
+                              $sql= "SELECT news.id, categories.category_id, news.news_title, news.text, categories.categories_title, news.image
+                                                  FROM news LEFT JOIN categories ON news.category_id = categories.category_id ORDER BY 
+                                               news.id DESC LIMIT $limit";
+                              $query = mysqli_query($conn, $sql); 
+                              while($row = mysqli_fetch_assoc($query)){
+                                echo '<div class="mb-3">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="category.php?category_id='.$row['category_id'].'">'.$row["categories_title"].'</a>
+                                </div>
+                                <a class="small text-body text-uppercase font-weight-medium" href="news.php?id='.$row['id'].'">'.$row["news_title"].'</a>
+                            </div>';
+                              }
+                            ?>
+                
             </div>
             <div class="col-lg-3 col-md-6 mb-5">
                 <h5 class="mb-4 text-white text-uppercase font-weight-bold">Categories</h5>
                 <div class="m-n1">
-                    <a href="" class="btn btn-sm btn-secondary m-1">Politics</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Corporate</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Health</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Education</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Science</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Foods</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Entertainment</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Travel</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Lifestyle</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Politics</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Corporate</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Health</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Education</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Science</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Foods</a>
+                <?php
+                            $categoriesList = "SELECT * FROM categories";
+                              $categoriesResult = mysqli_query($conn, $categoriesList);
+                              if(mysqli_num_rows($categoriesResult)>0){
+                                while($row = mysqli_fetch_assoc($categoriesResult)){
+                                    echo "<a href='category.php?category_id={$row["category_id"]}' class='btn btn-sm btn-outline-secondary m-1'>$row[categories_title]</a>";
+                                }
+                              }
+                            ?>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 mb-5">
                 <h5 class="mb-4 text-white text-uppercase font-weight-bold">Flickr Photos</h5>
                 <div class="row">
-                    <div class="col-4 mb-3">
-                        <a href=""><img class="w-100" src="img/news-110x110-1.jpg" alt=""></a>
-                    </div>
-                    <div class="col-4 mb-3">
-                        <a href=""><img class="w-100" src="img/news-110x110-2.jpg" alt=""></a>
-                    </div>
-                    <div class="col-4 mb-3">
-                        <a href=""><img class="w-100" src="img/news-110x110-3.jpg" alt=""></a>
-                    </div>
-                    <div class="col-4 mb-3">
-                        <a href=""><img class="w-100" src="img/news-110x110-4.jpg" alt=""></a>
-                    </div>
-                    <div class="col-4 mb-3">
-                        <a href=""><img class="w-100" src="img/news-110x110-5.jpg" alt=""></a>
-                    </div>
-                    <div class="col-4 mb-3">
-                        <a href=""><img class="w-100" src="img/news-110x110-1.jpg" alt=""></a>
-                    </div>
+                    <?php
+                    $sql= "SELECT news.id, categories.category_id, news.news_title, news.text, categories.categories_title, news.image
+                           FROM news LEFT JOIN categories ON news.category_id = categories.category_id ORDER BY news.id";
+                    $results = mysqli_query($conn, $sql);
+                    while($row = mysqli_fetch_assoc($results)){
+                          echo '<div class="col-4 mb-3">
+                          <a href=""><img class="container-fluid w-100" src="include/Dashboard Panel/Backend Images/'.$row["image"].'"></a>
+                      </div>';
+                    }
+                    ?>
                 </div>
             </div>
         </div>

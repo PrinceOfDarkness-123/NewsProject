@@ -104,7 +104,7 @@ require("include/database.php");
                 <div class="navbar-nav mr-auto py-0">
                     <a href="index.php" class="nav-item nav-link">Home</a>
                     <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Category</a>
+                    <a href="#" class="nav-link dropdown-toggle active" data-toggle="dropdown">Category</a>
                     <div class="dropdown-menu rounded-0 m-0">
                             <?php
                               $categoriesList = "SELECT * FROM categories";
@@ -114,13 +114,9 @@ require("include/database.php");
                                     echo "<a href='category.php?category_id={$row["category_id"]}' class='dropdown-item'>".$row["categories_title"]."</a>";
                                 }
                               }
-                              
-                              
                             ?>
                         </div>
                     </div>
-                    
-                    <a href="single.php" class="nav-item nav-link">Single News</a>
                 </div>
                 <div class="input-group ml-auto d-none d-lg-flex" style="width: 100%; max-width: 300px;">
                     <input type="text" class="form-control border-0" placeholder="Keyword">
@@ -479,57 +475,36 @@ require("include/database.php");
                                 <a class="small text-body text-uppercase font-weight-medium" href="news.php?id='.$row['id'].'">'.$row["news_title"].'</a>
                             </div>';
                               }
-                              
                             ?>
                 
             </div>
             <div class="col-lg-3 col-md-6 mb-5">
                 <h5 class="mb-4 text-white text-uppercase font-weight-bold">Categories</h5>
                 <div class="m-n1">
-                    <a href="" class="btn btn-sm btn-secondary m-1">Politics</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Corporate</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Health</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Education</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Science</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Foods</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Entertainment</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Travel</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Lifestyle</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Politics</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Corporate</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Health</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Education</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Science</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Business</a>
-                    <a href="" class="btn btn-sm btn-secondary m-1">Foods</a>
+                <?php
+                            $categoriesList = "SELECT * FROM categories";
+                              $categoriesResult = mysqli_query($conn, $categoriesList);
+                              if(mysqli_num_rows($categoriesResult)>0){
+                                while($row = mysqli_fetch_assoc($categoriesResult)){
+                                    echo "<a href='category.php?category_id={$row["category_id"]}' class='btn btn-sm btn-outline-secondary m-1'>$row[categories_title]</a>";
+                                }
+                              }
+                            ?>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 mb-5">
                 <h5 class="mb-4 text-white text-uppercase font-weight-bold">Flickr Photos</h5>
                 <div class="row">
-                    <div class="col-4 mb-3">
-                        <a href=""><img class="w-100" src="img/news-110x110-1.jpg" alt=""></a>
-                    </div>
-                    <div class="col-4 mb-3">
-                        <a href=""><img class="w-100" src="img/news-110x110-2.jpg" alt=""></a>
-                    </div>
-                    <div class="col-4 mb-3">
-                        <a href=""><img class="w-100" src="img/news-110x110-3.jpg" alt=""></a>
-                    </div>
-                    <div class="col-4 mb-3">
-                        <a href=""><img class="w-100" src="img/news-110x110-4.jpg" alt=""></a>
-                    </div>
-                    <div class="col-4 mb-3">
-                        <a href=""><img class="w-100" src="img/news-110x110-5.jpg" alt=""></a>
-                    </div>
-                    <div class="col-4 mb-3">
-                        <a href=""><img class="w-100" src="img/news-110x110-1.jpg" alt=""></a>
-                    </div>
+                    <?php
+                    $sql= "SELECT news.id, categories.category_id, news.news_title, news.text, categories.categories_title, news.image
+                           FROM news LEFT JOIN categories ON news.category_id = categories.category_id ORDER BY news.id";
+                    $results = mysqli_query($conn, $sql);
+                    while($row = mysqli_fetch_assoc($results)){
+                          echo '<div class="col-4 mb-3">
+                          <a href=""><img class="container-fluid w-100" src="include/Dashboard Panel/Backend Images/'.$row["image"].'"></a>
+                      </div>';
+                    }
+                    ?>
                 </div>
             </div>
         </div>

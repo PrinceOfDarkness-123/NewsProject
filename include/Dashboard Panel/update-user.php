@@ -2,6 +2,7 @@
 ob_start();
 include("header.php");
 include("sidebar.php");
+require("../database.php");
 
 if(isset($_REQUEST['userSubmit'])){
 	$id = mysqli_real_escape_string($conn, $_REQUEST['id']);
@@ -38,6 +39,23 @@ if($updateRecords == TRUE){
 			 while($row = mysqli_fetch_assoc($results)){
 				 
 			 ?>
+	
+    
+     
+		 
+	
+       
+	
+	
+
+   
+	
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -133,16 +151,3 @@ if($updateRecords == TRUE){
 	
 </body>
 </html>
-<script>
-	function confirmation(){
-		let message = "Are you sure you want to Save Changes";
-		if(confirm(message) == true){
-  if (confirm(text) == true) {
-    text = "You pressed OK!";
-  } else {
-    text = "You canceled!";
-  }
-  document.getElementById("demo").innerHTML = text;
-		}
-	}
-</script>

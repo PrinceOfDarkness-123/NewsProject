@@ -2,57 +2,40 @@
 ob_start();
 include("header.php");
 include("sidebar.php");
-
+require("../database.php");
 
 if(isset($_REQUEST['postSubmit'])){
 	$title = mysqli_real_escape_string($conn, $_REQUEST['title']);
-	$category_id = mysqli_real_escape_string($conn, $_REQUEST['category']);
 	$text = mysqli_real_escape_string($conn, $_REQUEST['text']);
+	$category_id = mysqli_real_escape_string($conn, $_REQUEST['categories']);
 	$status = mysqli_real_escape_string($conn, $_REQUEST['status']);
-	
-    $imageName = $_FILES['image']['name'];
-    $imageSize = $_FILES['image']['size'];
-    $tmp_Name = $_FILES['image']['tmp_name'];
-    $extension = strchr($imageName, '.');
-    $image_extension = strtolower($extension);
-	if($image_extension == '.jpg' || $image_extension == '.png' || $image_extension == '.jpeg'){
-		$check_Image = "SELECT * FROM news WHERE image = '$imageName'";
-		$image_Result = mysqli_query($conn, $check_Image);
-		if (mysqli_num_rows($image_Result) > 0) {
-			die("Image has already been uploaded");
-		}else{
-			move_uploaded_file($tmp_Name, 'Backend Images/'.$imageName);
-		$sql = "INSERT INTO news (news_title, category_id, text, image, status) VALUES 
-		('$title', '$category_id', '$text', '$imageName', '$status');";
-		$sql.= "UPDATE categories SET cover = cover + 1 WHERE category_id = '$category_id'";
-		//$sql.= "DELETE FROM categories cover = cover - 1 WHERE id = '$category_id'";
-		$insertRecords = mysqli_multi_query($conn, $sql);
-			if($insertRecords == TRUE){
-				header("Location: $url/include/Dashboard Panel/posts.php");
-			}else{
-				die("Failed");
-			}
-		}
+	$file_name = $_FILES['post_image']['name'];
+	$file_size = $_FILES['post_image']['size'];
+	$file_temp = $_FILES['post_image']['tmp_name'];
+	$image_text = strchr($file_name, ".");
+	$image_ext = strtolower($image_text);
+
+	if ($image_ext != '.jpeg' && $image_ext != '.jpg' && $image_ext != '.png')
+    {
+     die("Error: Only images are allowed");
+    }
+    if ($file_size > 200000)
+    {
+    die("Error: File is too long");
+    }
+	if(empty($file_name) == FALSE){
+       $uploaded = move_uploaded_file($file_temp, 'post_images/'.$file_name);
+	   $sql = "INSERT INTO news (title, category_id, text, status, image) VALUES 
+	   ('$title', '$category_id', '$text', '$status', '$file_name')";
+	   $insertRecords = mysqli_query($conn, $sql);
+	   if($insertRecords == TRUE){
+		$msg = "Records Inserted";
 	}else{
-		die("Invalid Extension");
+		die("Failed");
 	}
-	if($imageSize > 200000){
-		die("Image is very big");
 	}
-
-	
-    
-    
-
-	
-	
-	
-
 }
-
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,7 +51,7 @@ if(isset($_REQUEST['postSubmit'])){
 </head>
 <body class="background">
 <div class="col-sm-6 mt-5 ms-5 ms-auto me-sm-auto" id="main">
-<form method="post" action="" class="form-control drop-shadow" enctype = "multipart/form-data" autocomplete>
+<form method="post" action="" class="form-control drop-shadow" enctype="multipart/form-data" autocomplete>
       <?php
 	   if(isset($msg)){
 		echo $msg;
@@ -81,32 +64,34 @@ if(isset($_REQUEST['postSubmit'])){
 	    <!--<small id="helpId" class="form-text text-muted">Help text</small>-->
 	</div>
 	<div class="form-group">  
-	  <label for="">Category</label>
-	  <select name="category" id="" class="form-control">
-        <option value="" disabled selected>Select Here</option>
-        <?php 
-        $categoriesList = "SELECT * FROM categories";
-        $categoriesResult = mysqli_query($conn, $categoriesList);
-        if(mysqli_num_rows($categoriesResult)>0){
-             while($row = mysqli_fetch_assoc($categoriesResult)){
-             echo "<option value=$row[category_id]>$row[categories_title]</option>";
-             }
-        }
-        ?>
+	  <label for="">Text</label>
+	  <input type="text"
+		class="form-control hover-shadow" name="text" id="" aria-describedby="helpId" placeholder="">
+	    <!--<small id="helpId" class="form-text text-muted">Help text</small>-->
+	</div>
+    <div class="form-group">  
+	  <label for="">Select a Category</label>
+	  <select name="categories" id="">
+        <option value="" disabled selected>Select One</option>
+            <?php 
+            $categories_box = "SELECT * from categories";
+            $category_query = mysqli_query($conn ,$categories_box);
+
+            if(mysqli_num_rows($category_query)){
+                while($row = mysqli_fetch_assoc($category_query)){
+                    echo "<option value=$row[id]>$row[title]</option>";
+                }
+            }
+            ?>
+        </option>
       </select>
 	    <!--<small id="helpId" class="form-text text-muted">Help text</small>-->
 	</div>
 	<div class="form-group">  
-	  <label for="">Text</label>
-	  <textarea class="form-control hover-shadow" name="text" id="" cols="30" rows="10"></textarea>
-	    <!--<small id="helpId" class="form-text text-muted">Help text</small>-->
-	</div>
-    <div class="form-group">  
 	  <label for="">Upload an Image</label>
-	  <input type="file"
-		class="form-control hover-shadow" name="image" id="" aria-describedby="helpId" placeholder="">
+	  <input type="file" name="post_image" id="">
 	    <!--<small id="helpId" class="form-text text-muted">Help text</small>-->
-	</div> 
+	</div>  
 	<div class="form-group radio">
 	  <label for="">Status</label>
 	  <div class="form-control hover-shadow">
@@ -115,7 +100,6 @@ if(isset($_REQUEST['postSubmit'])){
 	  <!--<small id="fileHelpId" class="form-text text-muted">Help text</small>-->
 	  </div> 
 	</div>
-    
 	<div class="form-group">
 	<input id="" name="postSubmit" class="btn btn-primary btn-color align-middle" type="submit" value="Submit">
 	</div>
